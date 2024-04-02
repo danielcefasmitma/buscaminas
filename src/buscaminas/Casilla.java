@@ -52,21 +52,26 @@ public class Casilla {
 	public boolean recorrida() {
 		return recorrida;
 	}
-
+        
+        public int getNumeroMinasAlrededor(){
+            return numeroMinasAlrededor;
+        }
+        
 	public void mostrar() {
-		GestorIO gestorIO = new GestorIO();
-		String item = "#";
-		if (!estaCubierta()) {
-			if (hayNumero()) {
-				item = "" + numeroMinasAlrededor;
-			} else if (hayExplosion()) {
-				item = "*";
-			} else if (estaVacio()) {
-				item = " ";
-			}
-		}
+            GestorIO gestorIO = new GestorIO();
+            String item = "#";
+            if (!estaCubierta()) {
+                if (hayNumero()) {
+                        item = "" + numeroMinasAlrededor;
+                } else if (hayExplosion()) {
+                        item = "*";
+                } else if (estaVacio()) {
+                        item = " ";
+                }
+            }
 
-		gestorIO.out("[" + item + "]");
+            gestorIO.out("[" + item + "]");
 
-	}
+            }
+        
 }

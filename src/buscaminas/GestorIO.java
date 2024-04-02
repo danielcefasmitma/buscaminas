@@ -5,12 +5,15 @@ import java.io.InputStreamReader;
 public class GestorIO {
 	
 	public String inString() {
+        
 		String entrada = null;
 		try {
 			entrada = b.readLine();
 		} catch (Exception e) {
 			this.salir();
 		}
+                
+       
 		return entrada;
 	}
 

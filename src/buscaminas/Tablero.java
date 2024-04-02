@@ -18,6 +18,7 @@ public class Tablero {
 		numCasillasDescubiertas = 0;
 		mina = new Mina();
 		casillas = new Casilla[dimension][dimension];
+                
 		for (int i = 0; i < dimension; i++) {
 			for (int j = 0; j < dimension; j++) {
 				casillas[i][j] = new Casilla();
@@ -38,7 +39,7 @@ public class Tablero {
 			int nuevaFila = random.nextInt(dimension);
 			int nuevaColumna = random.nextInt(dimension);
 			posicionValida = nuevaFila < fila - 1 || fila + 1 < nuevaFila && 
-								nuevaColumna < columna - 1 || columna + 1 < nuevaColumna;
+                                         nuevaColumna < columna - 1 || columna + 1 < nuevaColumna;
 			if (posicionValida && !casillas[nuevaFila][nuevaColumna].hayMina()) {
 				casillas[nuevaFila][nuevaColumna].colocarMina(mina);
 				numeroMinasPuestas++;
@@ -129,6 +130,9 @@ public class Tablero {
 	    }
 	}	
 	
+        public Casilla[][] getCasillas(){
+            return casillas;
+        }
 	public void mostrar() {
 		for (int i = 0; i < dimension; i++) {
 			for (int j = 0; j < dimension; j++) {

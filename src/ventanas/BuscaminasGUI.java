@@ -9,6 +9,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +21,7 @@ public class BuscaminasGUI extends JFrame {
 
     private Tablero tablero;
     private Jugador jugador;
-    private JButton[][] buttons;
+    private JButton[][] botones;
 
     public BuscaminasGUI(int numeroMinas, int dimension) {
         tablero = new Tablero(numeroMinas, dimension);
@@ -29,12 +32,12 @@ public class BuscaminasGUI extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new GridLayout(dimension, dimension));
-        buttons = new JButton[dimension][dimension];
+        botones = new JButton[dimension][dimension];
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                buttons[i][j] = new JButton();
-                buttons[i][j].setPreferredSize(new Dimension(50, 50));
+                botones[i][j] = new JButton();
+                botones[i][j].setPreferredSize(new Dimension(50, 50));
             }
         }
 
@@ -42,31 +45,44 @@ public class BuscaminasGUI extends JFrame {
             for (int j = 0; j < dimension; j++) {
                 int fila = i;
                 int columna = j;
-
-                buttons[i][j].addActionListener(new ActionListener() {
+                Posicion posicion = new Posicion(fila, columna);
+                botones[i][j].addMouseListener(new MouseAdapter() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {
-                        Posicion posicion = new Posicion(fila, columna);
-                        if (!tablero.todasCasillasDescubiertas() && !tablero.hayExplosion(posicion)) {
-                            if (tablero.estadoInicial()) {
-                                tablero.inicializar(posicion);
+                    public void mouseClicked(MouseEvent e) { 
+                        if(e.getButton() == MouseEvent.BUTTON1 ){
+                            if (!tablero.todasCasillasDescubiertas() && !tablero.hayExplosion(posicion)) {
+                                if (tablero.estadoInicial()) {
+                                    tablero.inicializar(posicion);
+                                }
+                                tablero.descubrirCasilla(posicion, tablero);
+                                jugador.registrarMovimiento(posicion);
+
+                                actualizarTablero(dimension);
+
                             }
-                            tablero.descubrirCasilla(posicion, tablero);
-                            jugador.registrarMovimiento(posicion);
 
-                            actualizarTablero(dimension);
+                            if (tablero.todasCasillasDescubiertas()) {
+                                JOptionPane.showMessageDialog(null, "Ganaste la partida. :)");
 
-                        }
-
-                        if (tablero.todasCasillasDescubiertas()) {
-                            JOptionPane.showMessageDialog(null, "Ganaste la partida. :)");
-
-                        } else if (tablero.hayExplosion(posicion)) {
-                            JOptionPane.showMessageDialog(null, "Perdiste la partida. :(");
+                            } else if (tablero.hayExplosion(posicion)) {
+                                JOptionPane.showMessageDialog(null, "Perdiste la partida. :(");
+                            }
                         }
                     }
                 });
-                panel.add(buttons[i][j]);
+                
+                botones[i][j].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e){
+                        
+                        if(e.getButton() == MouseEvent.BUTTON3){
+                            tablero.colocarBandera(posicion);
+                            System.out.println("hola1");
+                        }
+                        actualizarTablero(dimension);
+                    }
+                });
+                panel.add(botones[i][j]);
             }
         }
         add(panel);
@@ -78,7 +94,7 @@ public class BuscaminasGUI extends JFrame {
         Casilla[][] casillas = tablero.getCasillas();
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                JButton boton = buttons[i][j];
+                JButton boton = botones[i][j];
                 Casilla casilla = casillas[i][j];
                 try {
                     establecerIconos(casilla, boton);
@@ -90,8 +106,9 @@ public class BuscaminasGUI extends JFrame {
     }
 
     public void establecerIconos(Casilla casilla, JButton boton) throws IOException {
+        String rutaImagen = "";
+        
         if (!casilla.estaCubierta()) {
-            String rutaImagen = "";
             if (casilla.hayNumero()) {
                 switch (casilla.getNumeroMinasAlrededor()) {
                     case 1:
@@ -117,6 +134,7 @@ public class BuscaminasGUI extends JFrame {
                 boton.setIcon(icono);
                 boton.setDisabledIcon(icono);
                 boton.setEnabled(false);
+                
             } else if (casilla.hayExplosion()) {
                 rutaImagen = "/imagenes/mina.png";
                 InputStream input = getClass().getResourceAsStream(rutaImagen);
@@ -127,9 +145,17 @@ public class BuscaminasGUI extends JFrame {
                 boton.setEnabled(false);
             } else if (casilla.estaVacio()) {
                 boton.setEnabled(false);
-            }
+            } 
+        }else if(casilla.hayBandera()){
+                System.out.println("hola2");
+                rutaImagen = "/imagenes/bandera.png";
+                InputStream input = getClass().getResourceAsStream(rutaImagen);
+                BufferedImage bufferImage = ImageIO.read(input);
+                Icon icono = new ImageIcon(bufferImage);
+                boton.setIcon(icono);
+        }else if(!casilla.hayBandera()){             
+                boton.setIcon(null);
         }
-
     }
 
 }

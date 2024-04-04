@@ -97,7 +97,7 @@ public class Tablero {
 		int fila = posicion.fila();
 		int columna = posicion.columna();
 		Casilla casilla = casillas[fila][columna];
-		if (casilla.estaCubierta()) {
+		if (casilla.estaCubierta() && !casillas[fila][columna].hayBandera()) {
 			casilla.quitarCubierta();
 			numCasillasDescubiertas++;
 			if (casilla.hayMina()) {
@@ -141,4 +141,8 @@ public class Tablero {
 			new GestorIO().out("\n");
 		}
 	}
+
+    public void colocarBandera(Posicion posicion) {
+        casillas[posicion.fila()][posicion.columna()].activarBandera();
+    }
 }

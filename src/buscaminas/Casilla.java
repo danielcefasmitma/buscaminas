@@ -5,13 +5,15 @@ public class Casilla {
 	private Mina mina;
 	private int numeroMinasAlrededor;
 	private boolean recorrida;
-
+        private boolean hayBandera;
+        
 	public Casilla() {
 		cubierta = true;
 		recorrida = false;
 		mina = null;
 		numeroMinasAlrededor = 0;
-	}
+                hayBandera = false;
+        }
 
 	public void colocarMina(Mina mina) {
 		this.mina = mina;
@@ -73,5 +75,13 @@ public class Casilla {
             gestorIO.out("[" + item + "]");
 
             }
+
+    public boolean hayBandera() {
+        return hayBandera;
+    }
+    
+    public void activarBandera(){
+        hayBandera = !hayBandera;
+    }
         
 }

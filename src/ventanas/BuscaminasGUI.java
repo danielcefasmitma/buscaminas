@@ -77,7 +77,6 @@ public class BuscaminasGUI extends JFrame {
                         
                         if(e.getButton() == MouseEvent.BUTTON3){
                             tablero.colocarBandera(posicion);
-                            System.out.println("hola1");
                         }
                         actualizarTablero(dimension);
                     }
@@ -147,7 +146,6 @@ public class BuscaminasGUI extends JFrame {
                 boton.setEnabled(false);
             } 
         }else if(casilla.hayBandera()){
-                System.out.println("hola2");
                 rutaImagen = "/imagenes/bandera.png";
                 InputStream input = getClass().getResourceAsStream(rutaImagen);
                 BufferedImage bufferImage = ImageIO.read(input);

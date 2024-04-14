@@ -17,8 +17,7 @@ public class Tablero {
 		this.dimension = dimension;
 		numCasillasDescubiertas = 0;
 		mina = new Mina();
-		casillas = new Casilla[dimension][dimension];
-                
+		casillas = new Casilla[dimension][dimension];               
 		for (int i = 0; i < dimension; i++) {
 			for (int j = 0; j < dimension; j++) {
 				casillas[i][j] = new Casilla();
@@ -133,6 +132,7 @@ public class Tablero {
         public Casilla[][] getCasillas(){
             return casillas;
         }
+        
 	public void mostrar() {
 		for (int i = 0; i < dimension; i++) {
 			for (int j = 0; j < dimension; j++) {
@@ -145,4 +145,9 @@ public class Tablero {
     public void colocarBandera(Posicion posicion) {
         casillas[posicion.fila()][posicion.columna()].activarBandera();
     }
+
+    public boolean haybandera(Posicion posicion) {
+        return casillas[posicion.fila()][posicion.columna()].hayBandera();
+    }
+    
 }
